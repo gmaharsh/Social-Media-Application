@@ -7,11 +7,13 @@ const { JWT_SECRET } = require('../../config');
 const { UserInputError } = require('apollo-server');
 
 function generateToken(user) {
-    jwt.sign({
+    const token = jwt.sign({
         id: user.id,
         email: user.email,
         username: user.username
     }, JWT_SECRET, { expiresIn: '1h' });
+
+    return token
 }
 
 module.exports = {
@@ -23,7 +25,7 @@ module.exports = {
             }
 
             const user = await User.findOne({ username });
-            
+
             if (!user) {
                 errors.general = "User not found";
                 throw new UserInputError('Wrong Crendentials', {errors})
