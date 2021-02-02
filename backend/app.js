@@ -1,35 +1,9 @@
 const { ApolloServer } = require('apollo-server');
-const gql = require('graphql-tag');
 const mongoose = require('mongoose');
 
 const { MONGODB } = require('./config');
-const Post = require('./models/Post');
-
-
-const typeDefs = gql`
-    type Post{
-        id:ID!,
-        body:String!,
-        createdAt:String!,
-        userName: String!
-    }
-    type Query{
-        getPosts:[Post]
-    },
-`;
-//Resolver is a collection of functions that generate response for a GraphQL query. In simple terms, a resolver acts as a GraphQL query handler
-const resolvers = {
-    Query: {
-        async getPosts() {
-            try {
-                const posts = await Post.find();
-                return posts
-            } catch (err) {
-                throw new Error(err)
-            }
-        }
-    },
-}
+const resolvers =  require('./graphql/resolvers');
+const typeDefs = require('./graphql/typeDefs');
 
 const server = new ApolloServer({
     typeDefs,
