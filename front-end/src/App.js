@@ -1,7 +1,6 @@
 import './App.css';
 import {BrowserRouter as Router,Route} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
-import { Container } from 'semantic-ui-react'
 import Home from './Components/Home/Home';
 import Login from './Components/Login/Login';
 import Register from './Components/Register/Register';
