@@ -1,4 +1,5 @@
 //Resolver is a collection of functions that generate response for a GraphQL query. In simple terms, a resolver acts as a GraphQL query handler
+const { AuthenticationError } = require('apollo-server');
 const Post = require('../../models/Post');
 const checkAuth =  require('../../validators/check_auth')
 
@@ -39,6 +40,22 @@ module.exports = {
             const post = await newPost.save();
 
             return post
+        },
+        async deletePost(_, { postId }, context) {
+            const user = checkAuth(context);
+
+            try {
+                const post = await Post.findById(postId);
+                if (user.username === post.username) {
+                    await post.delete();
+                    return 'Post deleted successfully'
+                } else {
+                    throw new AuthenticationError('Action not allowed')
+                }
+            } catch (err) {
+                throw new Error(err);
+            }
         }
+
     }
 }
