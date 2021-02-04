@@ -6,8 +6,11 @@ import Login from './Components/Login/Login';
 import Register from './Components/Register/Register';
 import MenuBar from './Components/MenuBar/MenuBar';
 
+
 import { AuthProvider } from './context/auth';
 import AuthRoute from './utils/AuthRoute';
+import { setContext } from "apollo-link-context";
+
 
 
 function App() {

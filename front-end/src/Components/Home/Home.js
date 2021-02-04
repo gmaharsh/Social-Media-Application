@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './Home.css';
 import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import { Grid, Transition } from 'semantic-ui-react';
 import Card from './Card/PostCard';
+import { AuthContext } from '../../context/auth';
+import PostForm from './PostForm/PostForm';
+import { FETCH_POSTS_QUERY } from '../../utils/graphql'
 
 function Home() {
-    const { loading, data } = useQuery(FETCH_POSTS_QUERY);
-
-    console.log(data)
+    const { loading, data} = useQuery(FETCH_POSTS_QUERY);
+    const { user } =useContext(AuthContext) 
+    // console.log(data)
     return (
         <div>
             <Grid columns={3} divided >
@@ -16,16 +18,22 @@ function Home() {
                     <h1>Recent Posts</h1>
                 </Grid.Row>
                 <Grid.Row>
-                    {loading && <h1>Loading posts..</h1>}
-                    {!loading && (
-                        <Transition.Group>
-                            {data &&
-                                data.getPosts.map((post) => (
-                                <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                                <Card post={post} />
-                                </Grid.Column>
-                            ))}
-                        </Transition.Group>
+                    {user && (
+                    <Grid.Column>
+                        <PostForm />
+                    </Grid.Column>
+                    )}
+                    {loading ? (
+                    <h1>Loading posts..</h1>
+                    ) : (
+                    <Transition.Group>
+                        {data &&
+                        data.getPosts.map((post) => (
+                            <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
+                            <Card post={post} />
+                            </Grid.Column>
+                        ))}
+                    </Transition.Group>
                     )}
                 </Grid.Row>
             </Grid>
@@ -33,26 +41,6 @@ function Home() {
     )
 }
 
-const FETCH_POSTS_QUERY = gql`
-    {
-        getPosts {
-        id
-        body
-        createdAt
-        username
-        likeCount
-        likes {
-            username
-        }
-        commentCount
-        comments {
-            id
-            username
-            createdAt
-            body
-        }
-        }
-    }`;
 
 
 
