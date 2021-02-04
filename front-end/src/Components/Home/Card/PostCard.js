@@ -1,21 +1,22 @@
 import React, { useContext } from 'react';
-import { Button, Card, Icon, Label } from 'semantic-ui-react';
+import { Button, Card, Icon, Label, Popup } from 'semantic-ui-react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../context/auth';
 import LikeButton from '../LikeButton/LikeButton';
 import DeleteButton from '../DeleteButton/DeleteButton';
+import MyPopup from '../../../utils/MyPopup';
 
 function PostCard({ post: { body, createdAt, id, username, likeCount, likes, commentCount } }) {
     const { user } =useContext(AuthContext) 
 
-    const likePost = () => {
-        console.log('Liked post')
-    }
+    // const likePost = () => {
+    //     console.log('Liked post')
+    // }
 
-    const commentonPost = () => {
-        console.log("Commented")
-    }
+    // const commentonPost = () => {
+    //     console.log("Commented")
+    // }
 
     return (
         <div className="postCard">
@@ -30,17 +31,21 @@ function PostCard({ post: { body, createdAt, id, username, likeCount, likes, com
                     <Card.Meta as ={Link} to={`/posts/${id}`}>{moment(createdAt).fromNow(true)}</Card.Meta>
                     <Card.Description>{body}</Card.Description>
                 </Card.Content>
-                <Card.Content extra>
-                    <LikeButton user={user} post={{ id, likes, likeCount }} />
-                    <Button as='div' labelPosition='right' onClick={commentonPost}>
-                        <Button color='blue'>
-                            <Icon name='comments' />
-                            Comment
+                <Card.Content extra style={{ display: 'flex'}}>
+                    <Popup content="Like Post" trigger={
+                        <LikeButton user={user} post={{ id, likes, likeCount }} />
+                    } />
+                    <MyPopup content="Comment on Post">
+                        <Button as='div' labelPosition='right'>
+                            <Button color="blue" basic>
+                                <Icon name='comments' />
+                                Comment
+                            </Button>
+                            <Label basic color="blue" pointing="left">
+                                {commentCount}
+                            </Label>
                         </Button>
-                        <Label as='a' basic color='blue' pointing='left'>
-                            {commentCount}
-                        </Label>
-                    </Button>
+                    </MyPopup>
                     {user && user.username === username && <DeleteButton postId={id} />}
                 </Card.Content>
             </Card>
