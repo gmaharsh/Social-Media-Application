@@ -6,16 +6,20 @@ import Login from './Components/Login/Login';
 import Register from './Components/Register/Register';
 import MenuBar from './Components/MenuBar/MenuBar';
 
+import {AuthProvider} from './context/auth'
+
 function App() {
   return (
-    <Router>
-      <div className="ui container">
-        <MenuBar />
-        <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="ui container">
+          <MenuBar />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
