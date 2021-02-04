@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Button, Card, Grid, Icon, Image, Label } from 'semantic-ui-react';
 import { AuthContext } from '../../context/auth';
 import LikeButton from '../Home/LikeButton/LikeButton';
+import DeleteButton from '../Home/DeleteButton/DeleteButton';
 
 function SinglePost(props) {
 
@@ -55,6 +56,7 @@ function SinglePost(props) {
                                         {commentCount}
                                     </Label>
                                 </Button>
+                                {user && user.username === username && <DeleteButton postId={id} />}
                             </Card.Content>
                         </Card>
                     </Grid.Column>
@@ -63,11 +65,7 @@ function SinglePost(props) {
         )
     }
 
-    return (
-        <div>
-            
-        </div>
-    )
+    return postMarkup;
 }
 
 
